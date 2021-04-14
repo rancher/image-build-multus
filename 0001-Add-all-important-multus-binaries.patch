@@ -1,0 +1,25 @@
+From fc5241fa9c9b3025e27b93ccbb3a6d8e6fd9160e Mon Sep 17 00:00:00 2001
+From: Manuel Buil <mbuil@suse.com>
+Date: Fri, 9 Apr 2021 17:03:29 +0200
+Subject: [PATCH] Add all important multus binaries
+
+Signed-off-by: Manuel Buil <mbuil@suse.com>
+---
+ images/entrypoint.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/images/entrypoint.sh b/images/entrypoint.sh
+index de88edce..5549058b 100755
+--- a/images/entrypoint.sh
++++ b/images/entrypoint.sh
+@@ -177,6 +177,7 @@ done
+ if [ "$SKIP_BINARY_COPY" = false ]; then
+   cp -f $MULTUS_BIN_FILE $CNI_BIN_DIR/_multus
+   mv -f $CNI_BIN_DIR/_multus $CNI_BIN_DIR/multus
++  mv -f /opt/cni/bin/* $CNI_BIN_DIR/ 
+ else
+   log "Entrypoint skipped copying Multus binary."
+ fi
+-- 
+2.26.2
+
