@@ -49,6 +49,7 @@ RUN go-assert-static.sh bin/* \
 
 # Create the multus image
 FROM ${UBI_IMAGE}
+RUN microdnf update -y && microdnf install python
 COPY --from=builder /go/multus-cni /usr/src/multus-cni
 COPY --from=cni_plugins /opt/cni/bin/bridge /opt/cni/bin/dhcp /opt/cni/bin/host-device /opt/cni/bin/host-local /opt/cni/bin/ipvlan /opt/cni/bin/macvlan /opt/cni/bin/ptp /opt/cni/bin/static /opt/cni/bin/tuning /opt/cni/bin/
 WORKDIR /
