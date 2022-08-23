@@ -1,6 +1,6 @@
 ARG ARCH="amd64"
 ARG TAG="v3.8"
-ARG UBI_IMAGE=registry.access.redhat.com/ubi7/ubi-minimal:latest
+ARG BCI_IMAGE=registry.suse.com/bci/bci-base:15.3.17.20.12
 ARG GO_IMAGE=rancher/hardened-build-base:v1.16.10b7
 
 # Build the multus project
@@ -19,8 +19,8 @@ RUN git clone --depth=1 https://github.com/k8snetworkplumbingwg/multus-cni \
     && ./hack/build-go.sh
 
 # Create the multus image
-FROM ${UBI_IMAGE}
-RUN microdnf update -y && microdnf install python
+FROM ${BCI_IMAGE}
+RUN zypper update -y && zypper install -y python
 COPY --from=builder /go/multus-cni /usr/src/multus-cni
 WORKDIR /
 RUN cp /usr/src/multus-cni/images/entrypoint.sh /entrypoint.sh
