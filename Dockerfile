@@ -20,7 +20,13 @@ RUN git clone --depth=1 https://github.com/k8snetworkplumbingwg/multus-cni \
 
 # Create the multus image
 FROM ${BCI_IMAGE}
-RUN zypper update -y && zypper install -y python
+RUN zypper refresh   && \
+    zypper update -y && \
+    zypper install -y   \
+        python          \
+        gawk            \
+        which        && \
+    zypper clean -a
 COPY --from=builder /go/multus-cni /usr/src/multus-cni
 WORKDIR /
 RUN cp /usr/src/multus-cni/images/entrypoint.sh /entrypoint.sh
