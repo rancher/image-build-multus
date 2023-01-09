@@ -23,7 +23,7 @@ FROM ${BCI_IMAGE}
 RUN zypper refresh && \
     zypper update -y && \
     zypper install -y \
-        python \
+        python3 \
         gawk \
         which && \
     zypper clean -a
