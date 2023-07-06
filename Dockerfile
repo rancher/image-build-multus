@@ -1,5 +1,5 @@
 ARG ARCH="amd64"
-ARG TAG="v3.9.3"
+ARG TAG="v4.0.2"
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG GO_IMAGE=rancher/hardened-build-base:v1.20.4b11
 
@@ -28,5 +28,6 @@ RUN zypper refresh && \
     zypper clean -a
 COPY --from=builder /go/multus-cni /usr/src/multus-cni
 WORKDIR /
-RUN cp /usr/src/multus-cni/images/entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+RUN cp /usr/src/multus-cni/bin/install_multus /
+RUN cp /usr/src/multus-cni/bin/thin_entrypoint /
+ENTRYPOINT ["/thin_entrypoint"]
