@@ -1,0 +1,12 @@
+image: rancher/hardened-multus-cni:{{build.tag}}
+manifests:
+  -
+    image: rancher/hardened-multus-cni:{{build.tag}}-amd64
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: rancher/hardened-multus-cni:{{build.tag}}-arm64
+    platform:
+      architecture: arm64
+      os: linux
