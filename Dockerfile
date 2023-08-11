@@ -11,10 +11,15 @@ ARG ARCH
 ARG TAG
 ENV GOARCH ${ARCH}
 ENV GOOS "linux"
+# patch to solve https://github.com/rancher/rke2/issues/4568
+# to be removed once upstream merges the fix
+# https://github.com/k8snetworkplumbingwg/multus-cni/pull/1137
+COPY self_delegation_bug.patch /tmp
 RUN git clone --depth=1 https://github.com/k8snetworkplumbingwg/multus-cni && \
     cd multus-cni && \
     git fetch --all --tags --prune && \
     git checkout tags/${TAG} -b ${TAG} && \
+    git apply /tmp/self_delegation_bug.patch && \
     ./hack/build-go.sh
 
 # Create the multus image
