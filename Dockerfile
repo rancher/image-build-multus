@@ -1,6 +1,5 @@
 ARG ARCH="amd64"
 ARG TAG="v4.0.2"
-ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG GO_IMAGE=rancher/hardened-build-base:v1.20.7b3
 
 # Build the multus project
@@ -23,16 +22,10 @@ RUN git clone --depth=1 https://github.com/k8snetworkplumbingwg/multus-cni && \
     ./hack/build-go.sh
 
 # Create the multus image
-FROM ${BCI_IMAGE}
-RUN zypper refresh && \
-    zypper update -y && \
-    zypper install -y \
-        python3 \
-        gawk \
-        which && \
-    zypper clean -a
-COPY --from=builder /go/multus-cni /usr/src/multus-cni
+FROM scratch
+COPY --from=builder  /go/multus-cni/bin /usr/src/multus-cni/bin
+COPY --from=builder  /go/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
 WORKDIR /
-RUN cp /usr/src/multus-cni/bin/install_multus /
-RUN cp /usr/src/multus-cni/bin/thin_entrypoint /
+COPY --from=builder /go/multus-cni/bin/install_multus /
+COPY --from=builder /go/multus-cni/bin/thin_entrypoint /
 ENTRYPOINT ["/thin_entrypoint"]
