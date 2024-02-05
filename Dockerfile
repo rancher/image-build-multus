@@ -1,5 +1,4 @@
 ARG ARCH="amd64"
-ARG TAG="v4.0.2"
 ARG GO_IMAGE=rancher/hardened-build-base:v1.20.7b3
 
 # Build the multus project
@@ -7,7 +6,7 @@ FROM ${GO_IMAGE} as builder
 RUN set -x && \
     apk --no-cache add patch
 ARG ARCH
-ARG TAG
+ARG TAG=v4.0.2
 ENV GOARCH ${ARCH}
 ENV GOOS "linux"
 # patch to solve https://github.com/rancher/rke2/issues/4568
