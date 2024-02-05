@@ -1,0 +1,63 @@
+---
+name: "Update multus version" 
+
+sources:
+ multus:
+   name: Get multus version
+   kind: githubrelease
+   spec:
+     owner: k8snetworkplumbingwg
+     repository: multus-cni
+     token: '{{ requiredEnv .github.token }}'
+     typefilter:
+       release: true
+       draft: false
+       prerelease: false
+     versionfilter:
+       kind: latest
+
+targets:
+  dockerfile:
+    name: "Bump to latest multus version in Dockerfile"
+    kind: dockerfile
+    scmid: default
+    sourceid: multus
+    spec:
+      file: "Dockerfile"
+      instruction:
+        keyword: "ARG"
+        matcher: "TAG"
+
+  makefile:
+    name: "Bump to latest multus version in Makefile"
+    kind: file
+    scmid: default
+    disablesourceinput: true
+    spec:
+      file: Makefile
+      matchpattern: '(?m)^TAG \?\= (.*)'
+      replacepattern: 'TAG ?= {{ source "multus" }}$$(BUILD_META)'
+
+scms:
+  default:
+    kind: github
+    spec:
+      token: '{{ requiredEnv .github.token }}'
+      username: '{{ requiredEnv .github.username }}'
+      user: '{{ .github.user }}'
+      email: '{{ .github.email }}'
+      owner: '{{ .github.owner }}'
+      repository: '{{ .github.repository }}'
+      branch: '{{ .github.branch }}'
+
+actions:
+    default:
+        title: 'Bump multus version to {{ source "multus" }}'
+        kind: github/pullrequest
+        spec:
+            automerge: false
+            labels:
+                - chore
+                - skip-changelog
+                - status/auto-created
+        scmid: default
