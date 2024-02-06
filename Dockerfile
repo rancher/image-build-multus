@@ -22,9 +22,7 @@ RUN git clone --depth=1 https://github.com/k8snetworkplumbingwg/multus-cni && \
 
 # Create the multus image
 FROM scratch
-COPY --from=builder  /go/multus-cni/bin /usr/src/multus-cni/bin
+COPY --from=builder  /go/multus-cni/bin/multus /usr/src/multus-cni/bin/multus
 COPY --from=builder  /go/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
-WORKDIR /
-COPY --from=builder /go/multus-cni/bin/install_multus /
-COPY --from=builder /go/multus-cni/bin/thin_entrypoint /
+COPY --from=builder  /go/multus-cni/bin/thin_entrypoint /
 ENTRYPOINT ["/thin_entrypoint"]
