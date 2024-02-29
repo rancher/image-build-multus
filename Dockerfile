@@ -6,7 +6,7 @@ FROM ${GO_IMAGE} as builder
 RUN set -x && \
     apk --no-cache add patch
 ARG ARCH
-ARG TAG=v4.0.2
+ARG TAG=v0.6.3
 ENV GOARCH ${ARCH}
 ENV GOOS "linux"
 # patch to solve https://github.com/rancher/rke2/issues/4568
