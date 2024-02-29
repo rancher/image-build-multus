@@ -1,5 +1,5 @@
 ARG ARCH="amd64"
-ARG GO_IMAGE=rancher/hardened-build-base:v1.20.7b3
+ARG GO_IMAGE=rancher/hardened-build-base:v1.21.7b1
 
 # Build the multus project
 FROM ${GO_IMAGE} as builder
