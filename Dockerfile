@@ -21,7 +21,7 @@ RUN git clone --depth=1 https://github.com/k8snetworkplumbingwg/multus-cni && \
     ./hack/build-go.sh
 
 # Create the multus image
-FROM scratch
+FROM scratch as multus-cni
 COPY --from=builder  /go/multus-cni/bin/multus /usr/src/multus-cni/bin/multus
 COPY --from=builder  /go/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
 COPY --from=builder  /go/multus-cni/bin/thin_entrypoint /
