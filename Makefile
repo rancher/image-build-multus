@@ -12,7 +12,7 @@ endif
 
 BUILD_META=-build$(shell date +%Y%m%d)
 ORG ?= rancher
-TAG ?= ${GITHUB_ACTION_TAG}
+TAG ?= v4.0.2$(BUILD_META)
 
 ifeq ($(TAG),)
 TAG := v4.0.2$(BUILD_META)
