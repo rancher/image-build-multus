@@ -12,6 +12,8 @@ endif
 
 BUILD_META=-build$(shell date +%Y%m%d)
 ORG ?= rancher
+PKG ?= github.com/k8snetworkplumbingwg/multus-cni
+SRC ?= github.com/k8snetworkplumbingwg/multus-cni
 TAG ?= ${GITHUB_ACTION_TAG}
 
 ifeq ($(TAG),)
@@ -29,7 +31,6 @@ image-build:
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
-		--build-arg ARCH=$(ARCH) \
 		--target multus-cni \
 		--tag $(ORG)/hardened-multus-cni:$(TAG) \
 		--tag $(ORG)/hardened-multus-cni:$(TAG)-$(ARCH) \
