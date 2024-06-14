@@ -1,4 +1,4 @@
-ARG GO_IMAGE=rancher/hardened-build-base:v1.21.11b2
+ARG GO_IMAGE=rancher/hardened-build-base:v1.21.11b3
 
 # Image that provides cross compilation tooling.
 FROM --platform=$BUILDPLATFORM tonistiigi/xx:1.3.0 AS xx
