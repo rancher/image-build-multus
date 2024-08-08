@@ -18,14 +18,8 @@ ARG SRC=github.com/k8snetworkplumbingwg/multus-cni
 ARG PKG=github.com/k8snetworkplumbingwg/multus-cni
 RUN git clone --depth=1 https://${SRC}.git $GOPATH/src/${PKG}
 WORKDIR $GOPATH/src/${PKG}
-# patch to solve https://github.com/rancher/rke2/issues/4568
-# to be removed once upstream merges the fix
-# https://github.com/k8snetworkplumbingwg/multus-cni/pull/1137
-COPY self_delegation_bug.patch /tmp
-
 RUN git fetch --all --tags --prune && \
-    git checkout tags/${TAG} -b ${TAG} && \
-    git apply /tmp/self_delegation_bug.patch
+    git checkout tags/${TAG} -b ${TAG}
 RUN go mod download
 # cross-compilation setup
 ARG TARGETARCH
