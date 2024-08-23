@@ -32,11 +32,17 @@ FROM ${GO_IMAGE} as strip_binary
 #strip needs to run on TARGETPLATFORM, not BUILDPLATFORM
 COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/thin_entrypoint /thin_entrypoint
 COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/multus /multus
-RUN strip /thin_entrypoint /multus
+COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/kubeconfig_generator /kubeconfig_generator
+COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/cert-approver /cert-approver
+COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/install_multus /install_multus
+RUN strip /thin_entrypoint /multus /kubeconfig_generator /cert-approver /install_multus
 
 # Create the multus image
 FROM scratch as multus-cni
 COPY --from=strip_binary  /multus /usr/src/multus-cni/bin/multus
 COPY --from=multus-builder  /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
 COPY --from=strip_binary    /thin_entrypoint /
+COPY --from=strip_binary    /kubeconfig_generator /
+COPY --from=strip_binary    /cert-approver /
+COPY --from=strip_binary    /install_multus /
 ENTRYPOINT ["/thin_entrypoint"]
