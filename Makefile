@@ -24,16 +24,29 @@ ifeq (,$(filter %$(BUILD_META),$(TAG)))
 $(error TAG $(TAG) needs to end with build metadata: $(BUILD_META))
 endif
 
-.PHONY: image-build
-image-build:
+.PHONY: image-build-thin
+image-build-thin:
 	docker buildx build \
 		--platform=$(ARCH) \
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
-		--target multus-cni \
+		--target multus-thin \
 		--tag $(ORG)/hardened-multus-cni:$(TAG) \
 		--tag $(ORG)/hardened-multus-cni:$(TAG)-$(ARCH) \
+		--load \
+	.
+
+.PHONY: image-build-thick
+image-build-thick:
+	docker buildx build \
+		--platform=$(ARCH) \
+		--build-arg PKG=$(PKG) \
+		--build-arg SRC=$(SRC) \
+		--build-arg TAG=$(TAG:$(BUILD_META)=) \
+		--target multus-thick \
+		--tag $(ORG)/hardened-multus-thick:$(TAG) \
+		--tag $(ORG)/hardened-multus-thick:$(TAG)-$(ARCH) \
 		--load \
 	.
 

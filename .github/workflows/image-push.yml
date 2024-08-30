@@ -42,13 +42,26 @@ jobs:
         username: ${{ env.DOCKER_USERNAME }}
         password: ${{ env.DOCKER_PASSWORD }}
 
-    - name: Build container image
+    - name: Build thin plugin image
       uses: docker/build-push-action@v6
       with:
         context: .
         push: true
         tags: rancher/hardened-multus-cni:${{ github.event.release.tag_name }}
         file: Dockerfile
+        target: multus-thin
+        platforms: linux/amd64, linux/arm64
+        build-args: |
+          TAG=${{ env.TAG }}
+
+    - name: Build thick plugin image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: rancher/hardened-multus-thick:${{ github.event.release.tag_name }}
+        file: Dockerfile
+        target: multus-thick
         platforms: linux/amd64, linux/arm64
         build-args: |
           TAG=${{ env.TAG }}
