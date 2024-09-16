@@ -10,6 +10,16 @@ else
 	ARCH=$(UNAME_M)
 endif
 
+ifndef TARGET_PLATFORMS
+	ifeq ($(UNAME_M), x86_64)
+		TARGET_PLATFORMS:=linux/amd64
+	else ifeq ($(UNAME_M), aarch64)
+		TARGET_PLATFORMS:=linux/arm64
+	else 
+		TARGET_PLATFORMS:=linux/$(UNAME_M)
+	endif
+endif
+
 BUILD_META=-build$(shell date +%Y%m%d)
 ORG ?= rancher
 PKG ?= github.com/k8snetworkplumbingwg/multus-cni
@@ -37,6 +47,21 @@ image-build-thin:
 		--load \
 	.
 
+.PHONY: push-image-thin
+push-image-thin:
+	docker buildx build \
+		--sbom=true \
+		--attest type=provenance,mode=max \
+		--platform=$(TARGET_PLATFORMS) \
+		--build-arg PKG=$(PKG) \
+		--build-arg SRC=$(SRC) \
+		--build-arg TAG=$(TAG:$(BUILD_META)=) \
+		--target multus-thin \
+		--tag $(ORG)/hardened-multus-cni:$(TAG) \
+		--tag $(ORG)/hardened-multus-cni:$(TAG)-$(ARCH) \
+		--push \
+		.
+
 .PHONY: image-build-thick
 image-build-thick:
 	docker buildx build \
@@ -49,6 +74,21 @@ image-build-thick:
 		--tag $(ORG)/hardened-multus-thick:$(TAG)-$(ARCH) \
 		--load \
 	.
+
+.PHONY: push-image-thick
+push-image-thick:
+	docker buildx build \
+		--sbom=true \
+		--attest type=provenance,mode=max \
+		--platform=$(TARGET_PLATFORMS) \
+		--build-arg PKG=$(PKG) \
+		--build-arg SRC=$(SRC) \
+		--build-arg TAG=$(TAG:$(BUILD_META)=) \
+		--target multus-thick \
+		--tag $(ORG)/hardened-multus-thick:$(TAG) \
+		--tag $(ORG)/hardened-multus-thick:$(TAG)-$(ARCH) \
+		--push \
+		.
 
 .PHONY: image-push
 image-push:
