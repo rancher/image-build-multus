@@ -50,6 +50,7 @@ image-build-thin:
 .PHONY: push-image-thin
 push-image-thin:
 	docker buildx build \
+		$(IID_FILE_FLAG) \
 		--sbom=true \
 		--attest type=provenance,mode=max \
 		--platform=$(TARGET_PLATFORMS) \
@@ -65,6 +66,7 @@ push-image-thin:
 .PHONY: image-build-thick
 image-build-thick:
 	docker buildx build \
+		$(IID_FILE_FLAG) \
 		--platform=$(ARCH) \
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
