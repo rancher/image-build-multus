@@ -85,6 +85,7 @@ image-build-thick:
 push-image-thick: IMAGE = $(REPO)/hardened-multus-thick:$(TAG)
 push-image-thick:
 	docker buildx build \
+	    $(IID_FILE_FLAG) \
 		--sbom=true \
 		--attest type=provenance,mode=max \
 		--platform=$(TARGET_PLATFORMS) \
