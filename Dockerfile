@@ -54,4 +54,5 @@ FROM scratch AS multus-thick
 COPY --from=multus-builder  /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
 COPY --from=strip_binary  /multus-daemon /usr/src/multus-cni/bin/multus-daemon
 COPY --from=strip_binary  /multus-shim /usr/src/multus-cni/bin/multus-shim
+COPY --from=strip_binary    /install_multus /
 ENTRYPOINT [ "/usr/src/multus-cni/bin/multus-daemon" ]
