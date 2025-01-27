@@ -8,14 +8,13 @@ FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS base-builder
 COPY --from=xx / /
 RUN apk add file make git clang lld patch
 ARG TARGETPLATFORM
-RUN set -x && \
-    xx-apk --no-cache add musl-dev gcc lld 
+RUN set -x && xx-apk --no-cache add musl-dev gcc lld 
 
 # Build the multus project
 FROM base-builder AS multus-builder
-ARG TAG=v4.1.4
-ARG SRC=github.com/k8snetworkplumbingwg/multus-cni
-ARG PKG=github.com/k8snetworkplumbingwg/multus-cni
+ARG TAG=v4.1.4-exp1
+ARG SRC=github.com/rancher/release-multus-cni
+ARG PKG=github.com/k8snetworkplubingwg/multus-cni
 RUN git clone --depth=1 https://${SRC}.git $GOPATH/src/${PKG}
 WORKDIR $GOPATH/src/${PKG}
 RUN git fetch --all --tags --prune && \
@@ -24,8 +23,7 @@ RUN go mod download
 # cross-compilation setup
 ARG TARGETARCH
 
-RUN xx-go --wrap && \
-    ./hack/build-go.sh
+RUN xx-go --wrap && ./hack/build-go.sh
 RUN xx-verify --static bin/thin_entrypoint bin/multus
 
 FROM ${GO_IMAGE} AS strip_binary
@@ -41,18 +39,18 @@ RUN strip /thin_entrypoint /multus /kubeconfig_generator /cert-approver /install
 
 # Create the multus image
 FROM scratch AS multus-thin
-COPY --from=strip_binary  /multus /usr/src/multus-cni/bin/multus
-COPY --from=multus-builder  /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
-COPY --from=strip_binary    /thin_entrypoint /
-COPY --from=strip_binary    /kubeconfig_generator /
-COPY --from=strip_binary    /cert-approver /
-COPY --from=strip_binary    /install_multus /
+COPY --from=strip_binary   /multus /usr/src/multus-cni/bin/multus
+COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
+COPY --from=strip_binary   /thin_entrypoint /
+COPY --from=strip_binary   /kubeconfig_generator /
+COPY --from=strip_binary   /cert-approver /
+COPY --from=strip_binary   /install_multus /
 ENTRYPOINT ["/thin_entrypoint"]
 
 # Create the thick plugin image
 FROM scratch AS multus-thick
 COPY --from=multus-builder  /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
-COPY --from=strip_binary  /multus-daemon /usr/src/multus-cni/bin/multus-daemon
-COPY --from=strip_binary  /multus-shim /usr/src/multus-cni/bin/multus-shim
+COPY --from=strip_binary    /multus-daemon /usr/src/multus-cni/bin/multus-daemon
+COPY --from=strip_binary    /multus-shim /usr/src/multus-cni/bin/multus-shim
 COPY --from=strip_binary    /install_multus /
 ENTRYPOINT [ "/usr/src/multus-cni/bin/multus-daemon" ]
