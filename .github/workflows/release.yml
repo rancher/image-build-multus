@@ -51,7 +51,7 @@ jobs:
     - name: Build and push thick plugin image
       uses: rancher/ecm-distro-tools/actions/publish-image@master
       env:
-        SRC: x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus
+        SRC: x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus-cni
       with:
         image: hardened-multus-thick
         tag: ${{ github.event.release.tag_name }}
