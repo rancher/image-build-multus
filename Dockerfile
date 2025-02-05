@@ -14,7 +14,7 @@ RUN set -x && \
 # Build the multus project
 FROM base-builder AS multus-builder
 ARG TAG=v4.1.4
-ARG SRC=github.com/k8snetworkplumbingwg/multus-cni
+ARG SRC=github.com/rancher/release-multus-cni
 ARG PKG=github.com/k8snetworkplumbingwg/multus-cni
 RUN git clone --depth=1 https://${SRC}.git $GOPATH/src/${PKG}
 WORKDIR $GOPATH/src/${PKG}
@@ -41,7 +41,7 @@ RUN strip /thin_entrypoint /multus /kubeconfig_generator /cert-approver /install
 
 # Create the multus image
 FROM scratch AS multus-thin
-COPY --from=strip_binary  /multus /usr/src/multus-cni/bin/multus
+COPY --from=strip_binary    /multus /usr/src/multus-cni/bin/multus
 COPY --from=multus-builder  /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
 COPY --from=strip_binary    /thin_entrypoint /
 COPY --from=strip_binary    /kubeconfig_generator /
