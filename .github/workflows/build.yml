@@ -28,7 +28,7 @@ jobs:
       uses: actions/create-github-app-token@v1
       id: app-token
       with:
-        repositories: release-multus
+        repositories: release-multus-cni
         app-id: ${{ env.APP_ID }}
         private-key: ${{ env.PRIVATE_KEY }}
 
@@ -93,7 +93,7 @@ jobs:
       uses: actions/create-github-app-token@v1
       id: app-token
       with:
-        repositories: release-whereabouts
+        repositories: release-multus-cni
         app-id: ${{ env.APP_ID }}
         private-key: ${{ env.PRIVATE_KEY }}
 
@@ -120,7 +120,7 @@ jobs:
         platforms: linux/arm64
         build-args: |
           TAG=${{ env.TAG }}
-          SRC=x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus
+          SRC=x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus-cni
 
     - name: Build thick plugin image
       uses: docker/build-push-action@v6
@@ -134,4 +134,4 @@ jobs:
         platforms: linux/arm64
         build-args: |
           TAG=${{ env.TAG }}
-          SRC=x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus
+          SRC=x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus-cni
