@@ -59,6 +59,7 @@ jobs:
         target: multus-thick
         build-args: |
           TAG=${{ env.TAG }}
+          SRC=x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus-cni
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@0.29.0
