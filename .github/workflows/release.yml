@@ -33,15 +33,24 @@ jobs:
           secret/data/github/repo/${{ github.repository }}/github/release-app-credentials appId | APP_ID ;
           secret/data/github/repo/${{ github.repository }}/github/release-app-credentials privateKey | PRIVATE_KEY
 
+    - name: Create App Token
+      uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        repositories: release-multus-cni
+        app-id: ${{ env.APP_ID }}
+        private-key: ${{ env.PRIVATE_KEY }}
+
     - name: Build and push thin plugin image
       uses: rancher/ecm-distro-tools/actions/publish-image@master
+      env:
+        SRC: x-access-token:${{ steps.app-token.outputs.token }}@github.com/rancher/release-multus-cni
       with:
         image: hardened-multus-cni
         tag: ${{ github.event.release.tag_name }}
-        public-repo: rancher
-        public-username: ${{ env.DOCKER_USERNAME }}
-        public-password: ${{ env.DOCKER_PASSWORD }}
         make-target: push-image-thin
+
+        push-to-public: false
 
         prime-repo: rancher
         prime-registry: ${{ env.PRIME_REGISTRY }}
@@ -55,10 +64,9 @@ jobs:
       with:
         image: hardened-multus-thick
         tag: ${{ github.event.release.tag_name }}
-        public-repo: rancher
-        public-username: ${{ env.DOCKER_USERNAME }}
-        public-password: ${{ env.DOCKER_PASSWORD }}
         make-target: push-image-thick
+
+        push-to-public: false
 
         prime-repo: rancher
         prime-registry: ${{ env.PRIME_REGISTRY }}
