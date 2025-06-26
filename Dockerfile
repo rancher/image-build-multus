@@ -37,7 +37,8 @@ COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bi
 COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/install_multus /install_multus
 COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/multus-daemon /multus-daemon
 COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/multus-shim /multus-shim
-RUN strip /thin_entrypoint /multus /kubeconfig_generator /cert-approver /install_multus /multus-daemon /multus-shim
+COPY --from=multus-builder /go/src/github.com/k8snetworkplumbingwg/multus-cni/bin/passthru /passthru
+RUN strip /thin_entrypoint /multus /kubeconfig_generator /cert-approver /install_multus /multus-daemon /multus-shim /passthru
 
 # Create the multus image
 FROM scratch AS multus-thin
@@ -54,5 +55,6 @@ FROM scratch AS multus-thick
 COPY --from=multus-builder  /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
 COPY --from=strip_binary  /multus-daemon /usr/src/multus-cni/bin/multus-daemon
 COPY --from=strip_binary  /multus-shim /usr/src/multus-cni/bin/multus-shim
+COPY --from=strip_binary  /passthru /usr/src/multus-cni/bin/passthru
 COPY --from=strip_binary    /install_multus /
 ENTRYPOINT [ "/usr/src/multus-cni/bin/multus-daemon" ]
