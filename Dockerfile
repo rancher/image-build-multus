@@ -1,3 +1,4 @@
+ARG BCI_IMAGE=registry.suse.com/bci/bci-busybox
 ARG GO_IMAGE=rancher/hardened-build-base:v1.21.11b3
 
 # Image that provides cross compilation tooling.
@@ -51,7 +52,7 @@ COPY --from=strip_binary    /install_multus /
 ENTRYPOINT ["/thin_entrypoint"]
 
 # Create the thick plugin image
-FROM scratch AS multus-thick
+FROM ${BCI_IMAGE} AS multus-thick
 COPY --from=multus-builder  /go/src/github.com/k8snetworkplumbingwg/multus-cni/LICENSE /usr/src/multus-cni/LICENSE
 COPY --from=strip_binary  /multus-daemon /usr/src/multus-cni/bin/multus-daemon
 COPY --from=strip_binary  /multus-shim /usr/src/multus-cni/bin/multus-shim
