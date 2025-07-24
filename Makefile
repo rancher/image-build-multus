@@ -39,13 +39,12 @@ REPO ?= rancher
 image-build-thin: IMAGE = $(REPO)/hardened-multus-cni:$(TAG)
 image-build-thin:
 	docker buildx build \
-		--platform=$(ARCH) \
+		--platform=$(TARGET_PLATFORMS) \
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--target multus-thin \
 		--tag $(IMAGE) \
-		--tag $(IMAGE)-$(ARCH) \
 		--load \
 	.
 
@@ -62,7 +61,6 @@ push-image-thin:
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--target multus-thin \
 		--tag $(IMAGE) \
-		--tag $(IMAGE)-arch \
 		--push \
 		.
 
@@ -71,13 +69,12 @@ image-build-thick: IMAGE = $(REPO)/hardened-multus-thick:$(TAG)
 image-build-thick:
 	docker buildx build \
 		$(IID_FILE_FLAG) \
-		--platform=$(ARCH) \
+		--platform=$(TARGET_PLATFORMS) \
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--target multus-thick \
 		--tag $(IMAGE) \
-		--tag $(IMAGE)-$(ARCH) \
 		--load \
 	.
 
@@ -94,7 +91,6 @@ push-image-thick:
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--target multus-thick \
 		--tag $(IMAGE) \
-		--tag $(IMAGE)-$(ARCH) \
 		--push \
 		.
 
