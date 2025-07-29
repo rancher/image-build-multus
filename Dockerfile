@@ -24,10 +24,22 @@ RUN git fetch --all --tags --prune && \
 RUN go mod download
 # cross-compilation setup
 ARG TARGETARCH
-
+ENV GO_LDFLAGS="-X ${PKG}/version.Version=${TAG}"
 RUN xx-go --wrap && \
-    ./hack/build-go.sh
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/thin_entrypoint" ./cmd/thin_entrypoint &&\
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/multus" ./cmd/multus &&\
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/kubeconfig_generator" ./cmd/kubeconfig_generator &&\
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/cert-approver" ./cmd/cert-approver &&\
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/install_multus" ./cmd/install_multus &&\
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/multus-daemon" ./cmd/multus-daemon &&\
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/multus-shim" ./cmd/multus-shim &&\
+    go-build-static.sh -gcflags=-trimpath=${GOPATH}/src -o "bin/passthru" ./cmd/passthru-cni
+
 RUN xx-verify --static bin/thin_entrypoint bin/multus
+RUN if [ "$(xx-info arch)" = "amd64" ]; then \
+        go-assert-boring.sh bin/thin_entrypoint bin/multus bin/kubeconfig_generator\
+         bin/cert-approver bin/multus-daemon bin/multus-shim; \
+    fi
 
 FROM ${GO_IMAGE} AS strip_binary
 #strip needs to run on TARGETPLATFORM, not BUILDPLATFORM
