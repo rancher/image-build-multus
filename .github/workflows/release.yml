@@ -64,6 +64,10 @@ jobs:
         prime-username: ${{ env.PRIME_REGISTRY_USERNAME }}
         prime-password: ${{ env.PRIME_REGISTRY_PASSWORD }}
 
+    - name: Clean up space on device
+      run: |
+        docker system prune -af || true
+
     - name: Build and push thick plugin image - Staging
       uses: rancher/ecm-distro-tools/actions/publish-image@master
       with:
