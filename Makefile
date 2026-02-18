@@ -26,7 +26,7 @@ SRC ?= github.com/k8snetworkplumbingwg/multus-cni
 TAG ?= ${GITHUB_ACTION_TAG}
 
 ifeq ($(TAG),)
-TAG := v4.2.3$(BUILD_META)
+TAG := v4.2.4$(BUILD_META)
 endif
 
 ifeq (,$(filter %$(BUILD_META),$(TAG)))
