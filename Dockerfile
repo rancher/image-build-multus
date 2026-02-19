@@ -14,7 +14,7 @@ RUN set -x && \
 
 # Build the multus project
 FROM base-builder AS multus-builder
-ARG TAG=v4.2.3
+ARG TAG=v4.2.4
 ARG SRC=github.com/k8snetworkplumbingwg/multus-cni
 ARG PKG=github.com/k8snetworkplumbingwg/multus-cni
 RUN git clone --depth=1 https://${SRC}.git $GOPATH/src/${PKG}
