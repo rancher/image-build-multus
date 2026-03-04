@@ -53,8 +53,7 @@ push-image-thin: IMAGE = $(REPO)/hardened-multus-cni:$(TAG)
 push-image-thin:
 	docker buildx build \
 		$(IID_FILE_FLAG) \
-		--sbom=true \
-		--attest type=provenance,mode=max \
+		$(BUILDX_ARGS) \
 		--platform=$(TARGET_PLATFORMS) \
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
@@ -63,6 +62,11 @@ push-image-thin:
 		--tag $(IMAGE) \
 		--push \
 		.
+
+.PHONY: push-prime-image-thin
+push-prime-image-thin:
+	BUILDX_ARGS="--sbom=true --attest type=provenance,mode=max" \
+	$(MAKE) push-image-thin
 
 .PHONY: image-build-thick
 image-build-thick: IMAGE = $(REPO)/hardened-multus-thick:$(TAG)
@@ -82,9 +86,8 @@ image-build-thick:
 push-image-thick: IMAGE = $(REPO)/hardened-multus-thick:$(TAG)
 push-image-thick:
 	docker buildx build \
-	    $(IID_FILE_FLAG) \
-		--sbom=true \
-		--attest type=provenance,mode=max \
+		$(IID_FILE_FLAG) \
+		$(BUILDX_ARGS) \
 		--platform=$(TARGET_PLATFORMS) \
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
@@ -93,6 +96,11 @@ push-image-thick:
 		--tag $(IMAGE) \
 		--push \
 		.
+
+.PHONY: push-prime-image-thick
+push-prime-image-thick:
+	BUILDX_ARGS="--sbom=true --attest type=provenance,mode=max" \
+	$(MAKE) push-image-thick
 
 .PHONY: image-push
 image-push:
