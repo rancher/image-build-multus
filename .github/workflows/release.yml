@@ -65,6 +65,7 @@ jobs:
         make-target: push-image-thin
 
         prime-repo: rancher
+        prime-make-target: push-prime-image-thin
         prime-registry: ${{ env.STAGING_REGISTRY }}
         prime-username: ${{ env.STAGING_REGISTRY_USERNAME }}
         prime-password: ${{ env.STAGING_REGISTRY_PASSWORD }}
@@ -80,6 +81,7 @@ jobs:
         make-target: push-image-thin
 
         prime-repo: rancher
+        prime-make-target: push-prime-image-thin
         prime-registry: ${{ env.PRIME_REGISTRY }}
         prime-username: ${{ env.PRIME_REGISTRY_USERNAME }}
         prime-password: ${{ env.PRIME_REGISTRY_PASSWORD }}
@@ -140,6 +142,7 @@ jobs:
         make-target: push-image-thick
 
         prime-repo: rancher
+        prime-make-target: push-prime-image-thick
         prime-registry: ${{ env.STAGING_REGISTRY }}
         prime-username: ${{ env.STAGING_REGISTRY_USERNAME }}
         prime-password: ${{ env.STAGING_REGISTRY_PASSWORD }}
@@ -155,6 +158,7 @@ jobs:
         make-target: push-image-thick
 
         prime-repo: rancher
+        prime-make-target: push-prime-image-thick
         prime-registry: ${{ env.PRIME_REGISTRY }}
         prime-username: ${{ env.PRIME_REGISTRY_USERNAME }}
         prime-password: ${{ env.PRIME_REGISTRY_PASSWORD }}
