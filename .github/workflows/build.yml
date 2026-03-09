@@ -23,7 +23,7 @@ jobs:
         echo "$(make -s log | grep TAG)" >> "$GITHUB_ENV"
 
     - name: Build thin plugin image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: .
         push: false
@@ -34,7 +34,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build thick plugin image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: .
         push: false
@@ -77,7 +77,7 @@ jobs:
       run: |
         echo "$(make -s log | grep TAG)" >> "$GITHUB_ENV"
     - name: Build container image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: .
         push: false
@@ -90,7 +90,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build thick plugin image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: .
         push: false
