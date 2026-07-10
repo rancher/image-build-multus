@@ -22,6 +22,8 @@ RUN git clone --depth=1 https://${SRC}.git $GOPATH/src/${PKG}
 WORKDIR $GOPATH/src/${PKG}
 RUN git fetch --all --tags --prune && \
     git checkout tags/${TAG} -b ${TAG}
+COPY go-mod-overrides ./go-mod-overrides
+RUN go-mod-overrides.sh ./go-mod-overrides
 RUN go mod download
 # cross-compilation setup
 ARG TARGETARCH
