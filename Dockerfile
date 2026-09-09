@@ -1,5 +1,5 @@
 ARG BCI_IMAGE=registry.suse.com/bci/bci-busybox
-ARG GO_IMAGE=rancher/hardened-build-base:v1.25.14b1
+ARG GO_IMAGE=rancher/hardened-build-base:v1.26.8b1
 
 
 # Image that provides cross compilation tooling.
@@ -15,7 +15,7 @@ RUN set -x && \
 
 # Build the multus project
 FROM base-builder AS multus-builder
-ARG TAG=v4.3.0
+ARG TAG=v4.3.1
 ARG SRC=github.com/k8snetworkplumbingwg/multus-cni
 ARG PKG=github.com/k8snetworkplumbingwg/multus-cni
 RUN git clone --depth=1 https://${SRC}.git $GOPATH/src/${PKG}
