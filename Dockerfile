@@ -1,5 +1,5 @@
 ARG BCI_IMAGE=registry.suse.com/bci/bci-busybox
-ARG GO_IMAGE=rancher/hardened-build-base:v1.26.8b1
+ARG GO_IMAGE=rancher/hardened-build-base:v1.26.9b1
 
 
 # Image that provides cross compilation tooling.
