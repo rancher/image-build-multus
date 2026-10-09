@@ -1,10 +1,10 @@
-# golang.org/x/net: CVE-2026-25681 (net/html XSS via arbitrary code execution), CVE-2026-27136 (net/html XSS via HTML parsing bypass), CVE-2026-33814 (net/http2 DoS), CVE-2026-39821 (x/net/idna punycode), CVE-2026-46600 (x/net/dns/dnsmessage panic parsing invalid SVCB or HTTPS RR).
-# Drop once upstream requires golang.org/x/net >= v0.56.0.
--replace golang.org/x/net=golang.org/x/net@v0.56.0
+# golang.org/x/net: CVE-2026-25681 (net/html XSS via arbitrary code execution), CVE-2026-27136 (net/html XSS via HTML parsing bypass), CVE-2026-33814 (net/http2 DoS), CVE-2026-39821 (x/net/idna punycode), CVE-2026-46600 (x/net/dns/dnsmessage panic parsing invalid SVCB or HTTPS RR), CVE-2026-78659 (HTTP/2 server memory exhaustion via Trailer headers), CVE-2026-78660 (HTTP/2 transport accepts malformed framing headers), CVE-2026-78669 (HTTP/2 CPU exhaustion from repeated initial window changes), CVE-2026-78663 (HTTP/2 double flow control refund), CVE-2026-97032 (HTTP/2 server crash from HPACK encoder race).
+# Drop once upstream requires golang.org/x/net >= v0.60.0.
+-replace golang.org/x/net=golang.org/x/net@v0.60.0
 
-# golang.org/x/text: CVE-2026-56852 (infinite loop on invalid input).
-# Drop once upstream requires golang.org/x/text >= v0.39.0.
--replace golang.org/x/text=golang.org/x/text@v0.39.0
+# golang.org/x/text: CVE-2026-56852 (infinite loop on invalid input); v0.42.0 required by golang.org/x/net v0.60.0.
+# Drop once upstream requires golang.org/x/text >= v0.42.0.
+-replace golang.org/x/text=golang.org/x/text@v0.42.0
 
 # google.golang.org/grpc: CVE-2026-84304, CVE-2026-84445 (HIGH), CVE-2026-84303 (MEDIUM); bump to v1.83.2.
 # Drop once upstream requires google.golang.org/grpc >= v1.83.2.
