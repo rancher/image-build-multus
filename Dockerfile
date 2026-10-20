@@ -16,9 +16,8 @@ RUN set -x && \
 # Build the multus project
 FROM base-builder AS multus-builder
 ARG TAG
-ARG SRC=github.com/k8snetworkplumbingwg/multus-cni
 ARG PKG=github.com/k8snetworkplumbingwg/multus-cni
-RUN git clone --depth=1 https://${SRC}.git $GOPATH/src/${PKG}
+RUN git clone --depth=1 https://${PKG}.git $GOPATH/src/${PKG}
 WORKDIR $GOPATH/src/${PKG}
 RUN git fetch --all --tags --prune && \
     git checkout tags/${TAG} -b ${TAG}
