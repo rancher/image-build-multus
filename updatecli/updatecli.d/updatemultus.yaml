@@ -41,13 +41,12 @@ scms:
       branch: '{{ .github.branch }}'
 
 actions:
-    default:
-        title: 'Bump multus version to {{ source "multus" }}'
-        kind: github/pullrequest
-        spec:
-            automerge: false
-            labels:
-                - chore
-                - skip-changelog
-                - status/auto-created
-        scmid: default
+  default:
+    title: 'Bump multus version to {{ source "multus" }}'
+    kind: github/pullrequest
+    spec:
+      automerge: false
+      labels:
+        - updatecli
+        - status/auto-created
+    scmid: default
