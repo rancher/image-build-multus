@@ -22,11 +22,9 @@ targets:
     kind: file
     sourceid: multus
     scmid: default
-    disablesourceinput: true
     spec:
       file: TAG
       matchpattern: '(?m)^(.+)$'
-      replacepattern: '{{ source "multus" }}'
 
 scms:
   default:
